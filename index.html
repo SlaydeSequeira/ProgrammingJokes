@@ -159,7 +159,7 @@
         </div>
         
         <div class="controls">
-            <input type="number" class="joke-input" id="jokeNumber" placeholder="Enter joke number (3-50)" min="3" max="50">
+            <input type="number" class="joke-input" id="jokeNumber" placeholder="Enter joke number (1-100)" min="1" max="100">
             <div class="buttons">
                 <button id="showJokeBtn">Show Joke</button>
                 <button id="randomJokeBtn" class="random-btn">Random Joke</button>
@@ -170,7 +170,7 @@
 
     <script>
         // Store all jokes in an object
-    const jokes = {
+const jokes = {
     "key1": "A programmer puts two glasses on his bedside table before going to sleep. A full one, in case he gets thirsty, and an empty one, in case he doesn't.",
     "key2": "Have a great weekend! I hope your code behaves the same on Monday as it did on Friday.",
     "key3": "Judge: \"I sentence you to the maximum punishment...\" Me (thinking): \"Please be death, please be death...\" Judge: \"Learn Java!\" Me: \"Damn.\"",
@@ -220,11 +220,58 @@
     "key47": "There are only 10 kinds of people in this world: those who know binary and those who don't.",
     "key48": "\"Knock, knock.\" \"Who's there?\" [very long pause] \"Java.\"",
     "key49": "Programming is 10% science, 20% ingenuity, and 70% getting the ingenuity to work with the science.",
-    "key50": "A man is smoking a cigarette and blowing smoke rings into the air. His girlfriend becomes irritated with the smoke and says \"Can't you see the warning on the cigarette pack? Smoking is hazardous to your health!\" to which the man replies, \"I am a programmer. We don't worry about warnings; we only worry about errors.\"",
-    "key51": "The generation of random numbers is too important to be left to chance.",
-    "key52": "Debugging: Removing the needles from the haystack.",
-    "key53": "Hey Girl, Roses are #ff0000, Violets are #0000ff, I use hex codes, But I'd use RGB for you.",
-    "key54": "Debugging is like being the detective in a crime movie where you're also the murderer at the same time."
+    "key50": "Debugging is like being the detective in a crime movie where you're also the murderer.",
+    "key51": "C++ is like my ex—full of undefined behavior and crashes randomly.",
+    "key52": "Why did the developer go broke? Because he used up all his cache.",
+    "key53": "I used to be a programmer, but then I took an arrow function to the knee.",
+    "key54": "Why don’t programmers like nature? It has too many bugs.",
+    "key55": "A QA engineer walks into a bar. Orders a beer. Orders 999 beers. Orders -1 beer. Orders a lizard. Orders a NULL beer. The bar bursts into flames.",
+    "key56": "What’s the worst part about programming? The typos… and the existential dread.",
+    "key57": "Java is like a protective parent. You can’t touch anything without explicit permission.",
+    "key58": "I told my wife I was writing a program that will make me rich. She left me for a Python developer.",
+    "key59": "A junior dev asked me how I debug so fast. I told him I just cry until the bug fixes itself.",
+    "key60": "Segmentation fault (core dumped). The story of my life.",
+    "key61": "Why did the web developer go broke? Because he used up all his cache.",
+    "key62": "My love life is like my code—full of exceptions.",
+        "key63": "The problem with programming jokes is that not everyone gets them.",
+    "key64": "Why do programmers hate nature? It has too many bugs.",
+    "key65": "A C programmer goes to the store. His wife says, 'Buy a gallon of milk, and if they have eggs, get a dozen.' He returns with 13 gallons of milk.",
+    "key66": "How do you comfort a JavaScript bug? You console it.",
+    "key67": "Why do Python programmers prefer dark mode? Because they don't like to see the whitespaces.",
+    "key68": "JavaScript is like a relationship—it’s complicated.",
+    "key69": "Why did the Git repository break up? Because it had too many conflicts.",
+    "key70": "How does a computer tell you it needs a break? It gives you a blue screen of death.",
+    "key71": "Why was the developer always calm? He could handle exceptions.",
+    "key72": "Why do Java developers wear glasses? Because they don’t C#.",
+    "key73": "How do you generate a random string? Put a JavaScript developer in front of a keyboard and tell him to write code.",
+    "key74": "What do you call a software engineer who only listens to sad music? A Node.js developer.",
+    "key75": "What’s a programmer’s favorite place in New York? The Stack Exchange.",
+    "key76": "Why don’t programmers go to therapy? Because they prefer to solve their own problems recursively.",
+    "key77": "I would love to change the world, but they won’t give me the source code.",
+    "key78": "What did the 0 say to the 1? Stop being so positive!",
+    "key79": "Why did the coder get locked out of his house? Because he lost his keys… and his tokens.",
+    "key80": "What does a JavaScript developer say when something breaks? ‘This shouldn’t be happening.’",
+    "key81": "Why did the CSS file go to therapy? Because it had too many issues with alignment.",
+    "key82": "A backend developer and a frontend developer walk into a bar. The bartender says, ‘Sorry, we don’t serve your kind here.’",
+    "key83": "A programmer was arrested for writing unreadable code. He refused to comment.",
+    "key84": "Why did the software engineer refuse to go outside? Because he didn’t want to deal with real-world problems.",
+    "key85": "A programming language walks into a bar. The bartender says, ‘We don’t serve your type here.’",
+    "key86": "Why do programmers prefer dark mode? Because light attracts bugs!",
+    "key87": "Why was the JavaScript developer so good at magic? Because he knew how to hoist things.",
+    "key88": "Why did the developer bring a ladder to work? Because he wanted to reach new heights in programming.",
+    "key89": "What’s a computer’s least favorite dance move? The crash-and-burn.",
+    "key90": "A database administrator walks into a bar. He sees two tables and asks, ‘Can I join you?’",
+    "key91": "What did the frontend developer say to the backend developer? ‘You’re too slow, keep up with the calls!’",
+    "key92": "Why don’t programmers like to play hide and seek? Because good luck hiding when you always return.",
+    "key93": "How do you make an AI cry? Feed it biased data.",
+    "key94": "Why did the computer go to art school? Because it wanted to improve its graphics!",
+    "key95": "What do you call a group of developers at a party? A stack overflow.",
+    "key96": "Why was the IT guy always calm? Because he had all the right protocols.",
+    "key97": "What’s a programmer’s favorite exercise? Push-ups and pull requests!",
+    "key98": "Why did the developer cross the road? To refactor the other side.",
+    "key99": "Why did the developer break up with his girlfriend? Because she had too many dependencies.",
+    "key100": "Why don’t programmers like to break up? Because they hate handling exceptions."
+    
 };
 
 
@@ -254,7 +301,7 @@
         showJokeBtn.addEventListener('click', () => {
             const num = jokeNumber.value;
             
-            if (num >= 3 && num <= 50) {
+            if (num >= 3 && num <= 100) {
                 const key = `key${num}`;
                 
                 if (jokes[key]) {
@@ -264,7 +311,7 @@
                     errorMsg.style.display = 'block';
                 }
             } else {
-                errorMsg.textContent = 'Please enter a valid joke number between 3 and 50';
+                errorMsg.textContent = 'Please enter a valid joke number between 3 and 100';
                 errorMsg.style.display = 'block';
             }
         });
