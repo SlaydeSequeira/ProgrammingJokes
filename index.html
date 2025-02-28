@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Jokes</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #4f46e5;
+            --accent-color: #8b5cf6;
+            --dark-color: #1e1b4b;
+            --light-color: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .joke-box {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 5px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .joke-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .joke-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .random-btn {
+            background-color: var(--accent-color);
+        }
+        
+        .random-btn:hover {
+            background-color: #7c3aed;
+        }
+        
+        .joke-id {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .error {
+            color: #ef4444;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        @media (max-width: 640px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .joke-input {
+                width: 100%;
+            }
+            
+            .buttons {
+                display: flex;
+                gap: 1rem;
+                width: 100%;
+            }
+            
+            button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Programming Jokes</h1>
+        <div class="joke-id" id="jokeId"></div>
+        <div class="joke-box" id="jokeText">
+            Click 'Random Joke' to get started or enter a joke number!
+        </div>
+        
+        <div class="controls">
+            <input type="number" class="joke-input" id="jokeNumber" placeholder="Enter joke number (3-50)" min="3" max="50">
+            <div class="buttons">
+                <button id="showJokeBtn">Show Joke</button>
+                <button id="randomJokeBtn" class="random-btn">Random Joke</button>
+            </div>
+        </div>
+        <div class="error" id="errorMsg">Please enter a valid joke number between 3 and 50</div>
+    </div>
+
+    <script>
+        // Store all jokes in an object
+    const jokes = {
+    "key1": "A programmer puts two glasses on his bedside table before going to sleep. A full one, in case he gets thirsty, and an empty one, in case he doesn't.",
+    "key2": "Have a great weekend! I hope your code behaves the same on Monday as it did on Friday.",
+    "key3": "Judge: \"I sentence you to the maximum punishment...\" Me (thinking): \"Please be death, please be death...\" Judge: \"Learn Java!\" Me: \"Damn.\"",
+    "key4": "What's the object-oriented way to become wealthy? Inheritance.",
+    "key5": "Why did the functional programmer get thrown out of school? Because he refused to take classes.",
+    "key6": ".NET developers are picky when it comes to food. They only like chicken NuGet.",
+    "key7": "Why do programmers wear glasses? Because they need to C#",
+    "key8": "Algorithm: A word used by programmers when they don't want to explain how their code works.",
+    "key9": "So what's a set of predefined steps the government might take to preserve the environment? An Al-Gore-ithm.",
+    "key10": "Why do Java programmers hate communism? They don't want to live in a classless society.",
+    "key11": "Hey baby I wish your name was asynchronous... ... so you'd give me a callback.",
+    "key12": "Java and C were telling jokes. It was C's turn, so he writes something on the wall, points to it and says \"Do you get the reference?\" But Java didn't.",
+    "key13": "\"Can I tell you a TCP joke?\" \"Please tell me a TCP joke.\" \"OK, I'll tell you a TCP joke.\"",
+    "key14": "A SQL statement walks into a bar and sees two tables. It approaches, and asks \"may I join you?\"",
+    "key15": "Why did the web developer walk out of a restaurant in disgust? The seating was laid out in tables.",
+    "key16": "Why is 6 afraid of 7 in hexadecimal Canada? Because 7 8 9 A?",
+    "key17": "Hey, wanna hear a joke? Parsing HTML with regex.",
+    "key18": "ASCII silly question, get a silly ANSI.",
+    "key19": "I've got a really good UDP joke to tell you but I don’t know if you'll get it.",
+    "key20": "Why do programmers confuse Halloween and Christmas? Because Oct 31 = Dec 25.",
+    "key21": "// This line doesn't actually do anything, but the code stops working when I delete it.",
+    "key22": "Why does no one like SQLrillex? He keeps dropping the database.",
+    "key23": "What do you call a developer who doesn't comment code? A developer.",
+    "key24": "Why did the Python programmer not respond to the foreign mails he got? Because his interpreter was busy collecting garbage.",
+    "key25": "Why did the programmer quit his job? Because he didn't get arrays.",
+    "key26": "How can you tell an extroverted programmer? He looks at YOUR shoes when he's talking.",
+    "key27": "\"Honey, go to the store and buy some eggs.\" \"OK.\" \"Oh and while you're there, get some milk.\" He never returned.",
+    "key28": "\"We messed up the keming again guys.\"",
+    "key29": "Why are modern programming languages so materialistic? Because they are object-oriented.",
+    "key30": "How many programmers does it take to screw in a light bulb? None. It's a hardware problem.",
+    "key31": "If Bill Gates had a dime for every time Windows crashed ... Oh wait, he does.",
+    "key32": "The glass is neither half-full nor half-empty, the glass is twice as big as it needs to be.",
+    "key33": "A byte walks into a bar looking miserable. The bartender asks it: \"What's wrong buddy?\" \"Parity error.\" it replies. \"Ah that makes sense, I thought you looked a bit off.\"",
+    "key34": "Programming is like sex. Make one mistake and you end up supporting it for the rest of your life.",
+    "key35": "Your mama's so FAT she can't save files bigger than 4GB.",
+    "key36": "How do you know God is a shitty programmer? He wrote the OS for an entire universe, but didn't leave a single useful comment.",
+    "key37": "Saying that Java is nice because it works on every OS is like saying that anal sex is nice because it works on every gender.",
+    "key38": "Your momma is so fat, you need to switch to NTFS to store a picture of her.",
+    "key39": "What do you get if you lock a monkey in a room with a typewriter for 8 hours? A regular expression.",
+    "key40": "Two C strings walk into a bar. The bartender asks \"What can I get ya?\" The first string says \"I'll have a gin and tonic.\" The second string thinks for a minute, then says \"I'll take a tequila sunriseJF()#$JF(#)$(@J#()$@#())!*FNIN!OBN134ufh1ui34hf9813f8h8384h981h3984h5F!##@\" The first string apologizes, \"You'll have to excuse my friend, he's not null-terminated.\"",
+    "key41": "What do you call a group of 8 Hobbits? A Hobbyte.",
+    "key42": "Why did the JavaScript heap close shop? It ran out of memory.",
+    "key43": "What is the best prefix for global variables? //",
+    "key44": "Today I learned that changing random stuff until your program works is \"hacky\" and a \"bad coding practice\" but if you do it fast enough it's \"Machine Learning\" and pays 4x your current salary.",
+    "key45": "A guy walks into a bar and asks for 1.4 root beers. The bartender says \"I'll have to charge you extra, that's a root beer float\". The guy says \"In that case, better make it a double.\"",
+    "key46": "Eight bytes walk into a bar. The bartender asks, \"Can I get you anything?\" \"Yeah,\" reply the bytes. \"Make us a double.\"",
+    "key47": "There are only 10 kinds of people in this world: those who know binary and those who don't.",
+    "key48": "\"Knock, knock.\" \"Who's there?\" [very long pause] \"Java.\"",
+    "key49": "Programming is 10% science, 20% ingenuity, and 70% getting the ingenuity to work with the science.",
+    "key50": "A man is smoking a cigarette and blowing smoke rings into the air. His girlfriend becomes irritated with the smoke and says \"Can't you see the warning on the cigarette pack? Smoking is hazardous to your health!\" to which the man replies, \"I am a programmer. We don't worry about warnings; we only worry about errors.\"",
+    "key51": "The generation of random numbers is too important to be left to chance.",
+    "key52": "Debugging: Removing the needles from the haystack.",
+    "key53": "Hey Girl, Roses are #ff0000, Violets are #0000ff, I use hex codes, But I'd use RGB for you.",
+    "key54": "Debugging is like being the detective in a crime movie where you're also the murderer at the same time."
+};
+
+
+        // DOM elements
+        const jokeText = document.getElementById('jokeText');
+        const jokeId = document.getElementById('jokeId');
+        const jokeNumber = document.getElementById('jokeNumber');
+        const showJokeBtn = document.getElementById('showJokeBtn');
+        const randomJokeBtn = document.getElementById('randomJokeBtn');
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Function to display a joke
+        function displayJoke(key) {
+            jokeText.textContent = jokes[key];
+            jokeId.textContent = key.replace('key', '#');
+            errorMsg.style.display = 'none';
+        }
+
+        // Function to get a random joke
+        function getRandomJoke() {
+            const keys = Object.keys(jokes);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            displayJoke(randomKey);
+        }
+
+        // Event listener for "Show Joke" button
+        showJokeBtn.addEventListener('click', () => {
+            const num = jokeNumber.value;
+            
+            if (num >= 3 && num <= 50) {
+                const key = `key${num}`;
+                
+                if (jokes[key]) {
+                    displayJoke(key);
+                } else {
+                    errorMsg.textContent = `No joke found with number ${num}`;
+                    errorMsg.style.display = 'block';
+                }
+            } else {
+                errorMsg.textContent = 'Please enter a valid joke number between 3 and 50';
+                errorMsg.style.display = 'block';
+            }
+        });
+
+        // Event listener for "Random Joke" button
+        randomJokeBtn.addEventListener('click', getRandomJoke);
+
+        // Allow pressing Enter key in the input field
+        jokeNumber.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                showJokeBtn.click();
+            }
+        });
+
+        // Show a random joke on page load
+        getRandomJoke();
+    </script>
+</body>
+</html>
