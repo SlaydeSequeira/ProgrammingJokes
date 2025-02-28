@@ -325,8 +325,20 @@ const jokes = {
                 showJokeBtn.click();
             }
         });
+document.addEventListener("DOMContentLoaded", function () {
+    const jokeBox = document.getElementById("jokeText");
+    const jokeIdBox = document.getElementById("jokeId");
+    
+    // Display the 47th joke by default
+    const jokeNumber = 47;
+    const jokeKey = "key" + jokeNumber;
+    
+    if (jokes[jokeKey]) {
+        jokeBox.textContent = jokes[jokeKey];
+        jokeIdBox.textContent = `Joke #${jokeNumber}`;
+    }
+});
 
-        // Show a random joke on page load
         displayJoke(joke[key47]);
     </script>
 </body>
