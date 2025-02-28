@@ -165,7 +165,7 @@
                 <button id="randomJokeBtn" class="random-btn">Random Joke</button>
             </div>
         </div>
-        <div class="error" id="errorMsg">Please enter a valid joke number between 3 and 50</div>
+        <div class="error" id="errorMsg">Please enter a valid joke number between 1 and 100</div>
     </div>
 
     <script>
@@ -301,7 +301,7 @@ const jokes = {
         showJokeBtn.addEventListener('click', () => {
             const num = jokeNumber.value;
             
-            if (num >= 3 && num <= 100) {
+            if (num >= 1 && num <= 100) {
                 const key = `key${num}`;
                 
                 if (jokes[key]) {
@@ -311,7 +311,7 @@ const jokes = {
                     errorMsg.style.display = 'block';
                 }
             } else {
-                errorMsg.textContent = 'Please enter a valid joke number between 3 and 100';
+                errorMsg.textContent = 'Please enter a valid joke number between 1 and 100';
                 errorMsg.style.display = 'block';
             }
         });
@@ -327,7 +327,7 @@ const jokes = {
         });
 
         // Show a random joke on page load
-        getRandomJoke();
+        displayJoke(47);
     </script>
 </body>
 </html>
