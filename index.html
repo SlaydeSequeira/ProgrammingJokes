@@ -103,38 +103,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
-        .swipe-left, .swipe-right {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.2s;
-        }
-        
-        .swipe-left {
-            left: 20px;
-        }
-        
-        .swipe-right {
-            right: 20px;
-        }
-        
-        .swipe-left:hover, .swipe-right:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-50%) scale(1.1);
-        }
-        
         .controls {
             margin-top: 1.5rem;
             display: flex;
@@ -215,18 +183,6 @@
             opacity: 0;
         }
         
-        /* Instructions overlay */
-        .instructions {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 0.9rem;
-            color: rgba(226, 232, 240, 0.7);
-            padding: 0.5rem;
-        }
-        
         /* Glowing effect */
         .container::before {
             content: '';
@@ -251,7 +207,7 @@
         @media (max-width: 640px) {
             .container {
                 padding: 1.5rem;
-                height: 80vh;
+                height: 85vh;
             }
             
             .controls {
@@ -288,7 +244,6 @@
         <div class="cards-container" id="cardsContainer">
             <!-- Cards will be dynamically added here -->
         </div>
-    
         
         <div class="controls">
             <input type="number" class="joke-input" id="jokeNumber" placeholder="Enter joke number (1-100)" min="1" max="100">
@@ -298,8 +253,6 @@
             </div>
         </div>
         <div class="error" id="errorMsg">Please enter a valid joke number between 1 and 100</div>
-        
-       
     </div>
 
     <script>
@@ -366,7 +319,7 @@ const jokes = {
     "key60": "Segmentation fault (core dumped). The story of my life.",
     "key61": "Why did the web developer go broke? Because he used up all his cache.",
     "key62": "My love life is like my code—full of exceptions.",
-    "key63": "The problem with programming jokes is that not everyone gets them.",
+        "key63": "The problem with programming jokes is that not everyone gets them.",
     "key64": "Why do programmers hate nature? It has too many bugs.",
     "key65": "A C programmer goes to the store. His wife says, 'Buy a gallon of milk, and if they have eggs, get a dozen.' He returns with 13 gallons of milk.",
     "key66": "How do you comfort a JavaScript bug? You console it.",
@@ -414,8 +367,6 @@ const jokes = {
         const showJokeBtn = document.getElementById('showJokeBtn');
         const randomJokeBtn = document.getElementById('randomJokeBtn');
         const errorMsg = document.getElementById('errorMsg');
-        const swipeLeftBtn = document.getElementById('swipeLeftBtn');
-        const swipeRightBtn = document.getElementById('swipeRightBtn');
         
         let currentCardIndex = 0;
         let cards = [];
@@ -667,9 +618,6 @@ const jokes = {
         }
         
         // Event Listeners
-        swipeLeftBtn.addEventListener('click', () => swipeCard('left'));
-        swipeRightBtn.addEventListener('click', () => swipeCard('right'));
-        
         showJokeBtn.addEventListener('click', () => {
             const num = jokeNumber.value;
             
