@@ -6,47 +6,54 @@
     <title>Programming Jokes</title>
     <style>
         :root {
-            --primary-color: #6366f1;
-            --secondary-color: #4f46e5;
-            --accent-color: #8b5cf6;
-            --dark-color: #1e1b4b;
-            --light-color: #f8fafc;
+            --primary-color: #8B5CF6;
+            --secondary-color: #6D28D9;
+            --accent-color: #4F46E5;
+            --dark-color: #111827;
+            --darker-color: #050914;
+            --light-color: #E0E7FF;
+            --text-color: #E2E8F0;
+            --box-bg: #1E293B;
+            --border-color: #4B5563;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            background-color: var(--darker-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+            background-image: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
         }
         
         .container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background-color: var(--dark-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             width: 90%;
             max-width: 600px;
             padding: 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
         
         h1 {
             color: var(--primary-color);
             margin-bottom: 1.5rem;
-            font-size: 2rem;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
         }
         
         .joke-box {
-            background-color: #f8fafc;
-            border-radius: 8px;
+            background-color: var(--box-bg);
+            border-radius: 12px;
             padding: 2rem;
             margin: 1.5rem 0;
             min-height: 150px;
@@ -54,10 +61,11 @@
             align-items: center;
             justify-content: center;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             text-align: left;
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 1.1rem;
+            color: var(--light-color);
         }
         
         .controls {
@@ -71,35 +79,43 @@
         .joke-input {
             flex: 1;
             padding: 0.75rem 1rem;
-            border: 2px solid #d1d5db;
-            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.2s;
+            background-color: var(--box-bg);
+            color: var(--light-color);
         }
         
         .joke-input:focus {
             outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
         }
         
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             padding: 0.75rem 1.5rem;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         button:hover {
             background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.4);
         }
         
         button:active {
             transform: translateY(1px);
+            box-shadow: 0 2px 6px rgba(109, 40, 217, 0.4);
         }
         
         .random-btn {
@@ -107,26 +123,52 @@
         }
         
         .random-btn:hover {
-            background-color: #7c3aed;
+            background-color: #4338CA;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
         }
         
         .joke-id {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background-color: var(--dark-color);
+            background-color: var(--accent-color);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .error {
-            color: #ef4444;
-            margin-top: 0.5rem;
+            color: #EF4444;
+            margin-top: 0.75rem;
             font-size: 0.9rem;
             display: none;
+            background-color: rgba(239, 68, 68, 0.1);
+            border-radius: 6px;
+            padding: 0.5rem;
+        }
+        
+        /* Glowing effect */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            z-index: -1;
+            border-radius: 16px;
+            animation: glowing 10s linear infinite;
+            opacity: 0.5;
+        }
+        
+        @keyframes glowing {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.3; }
         }
         
         @media (max-width: 640px) {
@@ -146,6 +188,8 @@
             
             button {
                 flex: 1;
+                font-size: 0.9rem;
+                padding: 0.75rem 1rem;
             }
         }
     </style>
@@ -169,7 +213,6 @@
     </div>
 
     <script>
-        // Store all jokes in an object
 const jokes = {
     "key1": "A programmer puts two glasses on his bedside table before going to sleep. A full one, in case he gets thirsty, and an empty one, in case he doesn't.",
     "key2": "Have a great weekend! I hope your code behaves the same on Monday as it did on Friday.",
@@ -189,7 +232,7 @@ const jokes = {
     "key16": "Why is 6 afraid of 7 in hexadecimal Canada? Because 7 8 9 A?",
     "key17": "Hey, wanna hear a joke? Parsing HTML with regex.",
     "key18": "ASCII silly question, get a silly ANSI.",
-    "key19": "I've got a really good UDP joke to tell you but I don’t know if you'll get it.",
+    "key19": "I've got a really good UDP joke to tell you but I don't know if you'll get it.",
     "key20": "Why do programmers confuse Halloween and Christmas? Because Oct 31 = Dec 25.",
     "key21": "// This line doesn't actually do anything, but the code stops working when I delete it.",
     "key22": "Why does no one like SQLrillex? He keeps dropping the database.",
@@ -224,10 +267,10 @@ const jokes = {
     "key51": "C++ is like my ex—full of undefined behavior and crashes randomly.",
     "key52": "Why did the developer go broke? Because he used up all his cache.",
     "key53": "I used to be a programmer, but then I took an arrow function to the knee.",
-    "key54": "Why don’t programmers like nature? It has too many bugs.",
+    "key54": "Why don't programmers like nature? It has too many bugs.",
     "key55": "A QA engineer walks into a bar. Orders a beer. Orders 999 beers. Orders -1 beer. Orders a lizard. Orders a NULL beer. The bar bursts into flames.",
-    "key56": "What’s the worst part about programming? The typos… and the existential dread.",
-    "key57": "Java is like a protective parent. You can’t touch anything without explicit permission.",
+    "key56": "What's the worst part about programming? The typos… and the existential dread.",
+    "key57": "Java is like a protective parent. You can't touch anything without explicit permission.",
     "key58": "I told my wife I was writing a program that will make me rich. She left me for a Python developer.",
     "key59": "A junior dev asked me how I debug so fast. I told him I just cry until the bug fixes itself.",
     "key60": "Segmentation fault (core dumped). The story of my life.",
@@ -238,39 +281,39 @@ const jokes = {
     "key65": "A C programmer goes to the store. His wife says, 'Buy a gallon of milk, and if they have eggs, get a dozen.' He returns with 13 gallons of milk.",
     "key66": "How do you comfort a JavaScript bug? You console it.",
     "key67": "Why do Python programmers prefer dark mode? Because they don't like to see the whitespaces.",
-    "key68": "JavaScript is like a relationship—it’s complicated.",
+    "key68": "JavaScript is like a relationship—it's complicated.",
     "key69": "Why did the Git repository break up? Because it had too many conflicts.",
     "key70": "How does a computer tell you it needs a break? It gives you a blue screen of death.",
     "key71": "Why was the developer always calm? He could handle exceptions.",
-    "key72": "Why do Java developers wear glasses? Because they don’t C#.",
+    "key72": "Why do Java developers wear glasses? Because they don't C#.",
     "key73": "How do you generate a random string? Put a JavaScript developer in front of a keyboard and tell him to write code.",
     "key74": "What do you call a software engineer who only listens to sad music? A Node.js developer.",
-    "key75": "What’s a programmer’s favorite place in New York? The Stack Exchange.",
-    "key76": "Why don’t programmers go to therapy? Because they prefer to solve their own problems recursively.",
-    "key77": "I would love to change the world, but they won’t give me the source code.",
+    "key75": "What's a programmer's favorite place in New York? The Stack Exchange.",
+    "key76": "Why don't programmers go to therapy? Because they prefer to solve their own problems recursively.",
+    "key77": "I would love to change the world, but they won't give me the source code.",
     "key78": "What did the 0 say to the 1? Stop being so positive!",
     "key79": "Why did the coder get locked out of his house? Because he lost his keys… and his tokens.",
-    "key80": "What does a JavaScript developer say when something breaks? ‘This shouldn’t be happening.’",
+    "key80": "What does a JavaScript developer say when something breaks? 'This shouldn't be happening.'",
     "key81": "Why did the CSS file go to therapy? Because it had too many issues with alignment.",
-    "key82": "A backend developer and a frontend developer walk into a bar. The bartender says, ‘Sorry, we don’t serve your kind here.’",
+    "key82": "A backend developer and a frontend developer walk into a bar. The bartender says, 'Sorry, we don't serve your kind here.'",
     "key83": "A programmer was arrested for writing unreadable code. He refused to comment.",
-    "key84": "Why did the software engineer refuse to go outside? Because he didn’t want to deal with real-world problems.",
-    "key85": "A programming language walks into a bar. The bartender says, ‘We don’t serve your type here.’",
+    "key84": "Why did the software engineer refuse to go outside? Because he didn't want to deal with real-world problems.",
+    "key85": "A programming language walks into a bar. The bartender says, 'We don't serve your type here.'",
     "key86": "Why do programmers prefer dark mode? Because light attracts bugs!",
     "key87": "Why was the JavaScript developer so good at magic? Because he knew how to hoist things.",
     "key88": "Why did the developer bring a ladder to work? Because he wanted to reach new heights in programming.",
-    "key89": "What’s a computer’s least favorite dance move? The crash-and-burn.",
-    "key90": "A database administrator walks into a bar. He sees two tables and asks, ‘Can I join you?’",
-    "key91": "What did the frontend developer say to the backend developer? ‘You’re too slow, keep up with the calls!’",
-    "key92": "Why don’t programmers like to play hide and seek? Because good luck hiding when you always return.",
+    "key89": "What's a computer's least favorite dance move? The crash-and-burn.",
+    "key90": "A database administrator walks into a bar. He sees two tables and asks, 'Can I join you?'",
+    "key91": "What did the frontend developer say to the backend developer? 'You're too slow, keep up with the calls!'",
+    "key92": "Why don't programmers like to play hide and seek? Because good luck hiding when you always return.",
     "key93": "How do you make an AI cry? Feed it biased data.",
     "key94": "Why did the computer go to art school? Because it wanted to improve its graphics!",
     "key95": "What do you call a group of developers at a party? A stack overflow.",
     "key96": "Why was the IT guy always calm? Because he had all the right protocols.",
-    "key97": "What’s a programmer’s favorite exercise? Push-ups and pull requests!",
+    "key97": "What's a programmer's favorite exercise? Push-ups and pull requests!",
     "key98": "Why did the developer cross the road? To refactor the other side.",
     "key99": "Why did the developer break up with his girlfriend? Because she had too many dependencies.",
-    "key100": "Why don’t programmers like to break up? Because they hate handling exceptions."
+    "key100": "Why don't programmers like to break up? Because they hate handling exceptions."
     
 };
 
@@ -283,21 +326,18 @@ const jokes = {
         const randomJokeBtn = document.getElementById('randomJokeBtn');
         const errorMsg = document.getElementById('errorMsg');
 
-        // Function to display a joke
         function displayJoke(key) {
             jokeText.textContent = jokes[key];
             jokeId.textContent = key.replace('key', '#');
             errorMsg.style.display = 'none';
         }
 
-        // Function to get a random joke
         function getRandomJoke() {
             const keys = Object.keys(jokes);
             const randomKey = keys[Math.floor(Math.random() * keys.length)];
             displayJoke(randomKey);
         }
 
-        // Event listener for "Show Joke" button
         showJokeBtn.addEventListener('click', () => {
             const num = jokeNumber.value;
             
@@ -339,7 +379,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-        displayJoke(joke[key47]);
+
+        document.addEventListener("DOMContentLoaded", function() {
+            displayJoke("key47");
+        });
     </script>
 </body>
 </html>
