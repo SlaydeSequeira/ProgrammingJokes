@@ -28,6 +28,7 @@
             align-items: center;
             min-height: 100vh;
             background-image: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            overflow: hidden;
         }
         
         .container {
@@ -39,57 +40,107 @@
             padding: 2rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
             border: 1px solid var(--border-color);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
         }
         
         h1 {
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-size: 2.2rem;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             letter-spacing: 1px;
         }
-        @media (max-width: 640px) {
-    .container {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
 
-    .joke-box {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-    }
-}
-
-        .joke-box {
+        .cards-container {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .joke-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
             background-color: var(--box-bg);
             border-radius: 12px;
-            padding: 2rem;
-            margin: 1.5rem 0;
-            min-height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transform-origin: center;
+            transition: transform 0.3s ease;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            text-align: left;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: grab;
+            user-select: none;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .joke-card .joke-text {
+            padding: 1.5rem;
+            font-size: 1.2rem;
             line-height: 1.7;
-            font-size: 1.1rem;
             color: var(--light-color);
+            text-align: left;
+        }
+        
+        .joke-card .joke-id {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .swipe-left, .swipe-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            transition: all 0.2s;
+        }
+        
+        .swipe-left {
+            left: 20px;
+        }
+        
+        .swipe-right {
+            right: 20px;
+        }
+        
+        .swipe-left:hover, .swipe-right:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-50%) scale(1.1);
         }
         
         .controls {
+            margin-top: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
-            margin-top: 1.5rem;
         }
         
         .joke-input {
@@ -143,19 +194,6 @@
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
         }
         
-        .joke-id {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
         .error {
             color: #EF4444;
             margin-top: 0.75rem;
@@ -163,6 +201,29 @@
             display: none;
             background-color: rgba(239, 68, 68, 0.1);
             border-radius: 6px;
+            padding: 0.5rem;
+        }
+        
+        /* Tinder swipe animations */
+        .swipe-left-anim {
+            transform: translate(-200%, 0) rotate(-20deg);
+            opacity: 0;
+        }
+        
+        .swipe-right-anim {
+            transform: translate(200%, 0) rotate(20deg);
+            opacity: 0;
+        }
+        
+        /* Instructions overlay */
+        .instructions {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(226, 232, 240, 0.7);
             padding: 0.5rem;
         }
         
@@ -188,6 +249,11 @@
         }
         
         @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+                height: 85vh;
+            }
+            
             .controls {
                 flex-direction: column;
             }
@@ -207,16 +273,24 @@
                 font-size: 0.9rem;
                 padding: 0.75rem 1rem;
             }
+            
+            .joke-card .joke-text {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Programming Jokes</h1>
-        <div class="joke-id" id="jokeId"></div>
-        <div class="joke-box" id="jokeText">
-            Click 'Random Joke' to get started or enter a joke number!
+        
+        <div class="cards-container" id="cardsContainer">
+            <!-- Cards will be dynamically added here -->
         </div>
+        
+        <div class="swipe-left" id="swipeLeftBtn">←</div>
+        <div class="swipe-right" id="swipeRightBtn">→</div>
         
         <div class="controls">
             <input type="number" class="joke-input" id="jokeNumber" placeholder="Enter joke number (1-100)" min="1" max="100">
@@ -226,6 +300,10 @@
             </div>
         </div>
         <div class="error" id="errorMsg">Please enter a valid joke number between 1 and 100</div>
+        
+        <div class="instructions">
+            Swipe left or right to see new jokes
+        </div>
     </div>
 
     <script>
@@ -335,25 +413,267 @@ const jokes = {
 
 
         // DOM elements
-        const jokeText = document.getElementById('jokeText');
-        const jokeId = document.getElementById('jokeId');
+        const cardsContainer = document.getElementById('cardsContainer');
         const jokeNumber = document.getElementById('jokeNumber');
         const showJokeBtn = document.getElementById('showJokeBtn');
         const randomJokeBtn = document.getElementById('randomJokeBtn');
         const errorMsg = document.getElementById('errorMsg');
-
+        const swipeLeftBtn = document.getElementById('swipeLeftBtn');
+        const swipeRightBtn = document.getElementById('swipeRightBtn');
+        
+        let currentCardIndex = 0;
+        let cards = [];
+        const maxVisibleCards = 3;
+        
+        // Initialize cards with random jokes
+        function initializeCards() {
+            cardsContainer.innerHTML = '';
+            cards = [];
+            
+            // Get all joke keys
+            const jokeKeys = Object.keys(jokes);
+            
+            // Create initial cards
+            for (let i = 0; i < maxVisibleCards; i++) {
+                createCard(jokeKeys[Math.floor(Math.random() * jokeKeys.length)]);
+            }
+            
+            // Position cards in a stack
+            positionCards();
+        }
+        
+        // Create a new joke card
+        function createCard(jokeKey) {
+            const card = document.createElement('div');
+            card.className = 'joke-card';
+            
+            const jokeTextElement = document.createElement('div');
+            jokeTextElement.className = 'joke-text';
+            jokeTextElement.textContent = jokes[jokeKey];
+            
+            const jokeIdElement = document.createElement('div');
+            jokeIdElement.className = 'joke-id';
+            jokeIdElement.textContent = jokeKey.replace('key', '#');
+            
+            card.appendChild(jokeTextElement);
+            card.appendChild(jokeIdElement);
+            card.dataset.jokeKey = jokeKey;
+            
+            // Add drag events
+            addDragEvents(card);
+            
+            cardsContainer.appendChild(card);
+            cards.push(card);
+            
+            return card;
+        }
+        
+        // Position cards in a stack
+        function positionCards() {
+            cards.forEach((card, index) => {
+                const zIndex = cards.length - index;
+                const scale = 1 - (index * 0.05);
+                const translateY = index * 10;
+                
+                card.style.zIndex = zIndex;
+                card.style.transform = `translateY(${translateY}px) scale(${scale})`;
+                card.style.opacity = index === 0 ? 1 : 0.9 - (index * 0.1);
+            });
+        }
+        
+        // Add a new random card
+        function addRandomCard() {
+            const jokeKeys = Object.keys(jokes);
+            const randomKey = jokeKeys[Math.floor(Math.random() * jokeKeys.length)];
+            const newCard = createCard(randomKey);
+            
+            // Position off-screen initially
+            newCard.style.transform = 'translateY(50px) scale(0.8)';
+            newCard.style.opacity = 0;
+            
+            // Remove excess cards
+            if (cards.length > maxVisibleCards) {
+                const oldestCard = cards.shift();
+                setTimeout(() => {
+                    oldestCard.remove();
+                }, 300);
+            }
+            
+            // Reposition all cards
+            positionCards();
+        }
+        
+        // Handle card swipe
+        function swipeCard(direction) {
+            if (cards.length === 0) return;
+            
+            const currentCard = cards[0];
+            
+            // Add swipe animation
+            if (direction === 'left') {
+                currentCard.classList.add('swipe-left-anim');
+            } else {
+                currentCard.classList.add('swipe-right-anim');
+            }
+            
+            // Remove the card after animation
+            setTimeout(() => {
+                currentCard.remove();
+                cards.shift();
+                
+                // Add a new card and reposition
+                addRandomCard();
+            }, 300);
+        }
+        
+        // Add touch/drag events to card
+        function addDragEvents(card) {
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            
+            // Start drag
+            card.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+                isDragging = true;
+                card.style.transition = 'none';
+                
+                // Prevent text selection during drag
+                e.preventDefault();
+            });
+            
+            card.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                card.style.transition = 'none';
+                
+                // Prevent scrolling during drag
+                e.preventDefault();
+            });
+            
+            // While dragging
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging || card !== cards[0]) return;
+                
+                currentX = e.clientX;
+                const deltaX = currentX - startX;
+                const rotation = deltaX * 0.1; // Rotate as we drag
+                
+                card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
+                
+                // Adjust opacity of background cards
+                if (cards.length > 1) {
+                    const nextCard = cards[1];
+                    const opacity = 0.8 + (Math.abs(deltaX) / 1000);
+                    nextCard.style.opacity = Math.min(opacity, 1);
+                }
+            });
+            
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging || card !== cards[0]) return;
+                
+                currentX = e.touches[0].clientX;
+                const deltaX = currentX - startX;
+                const rotation = deltaX * 0.1; // Rotate as we drag
+                
+                card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
+                
+                // Adjust opacity of background cards
+                if (cards.length > 1) {
+                    const nextCard = cards[1];
+                    const opacity = 0.8 + (Math.abs(deltaX) / 1000);
+                    nextCard.style.opacity = Math.min(opacity, 1);
+                }
+                
+                // Prevent scrolling
+                e.preventDefault();
+            });
+            
+            // End drag
+            window.addEventListener('mouseup', (e) => {
+                if (!isDragging || card !== cards[0]) return;
+                
+                isDragging = false;
+                card.style.transition = 'transform 0.3s ease';
+                
+                const deltaX = currentX - startX;
+                
+                // Determine if it's a swipe
+                if (Math.abs(deltaX) > 100) {
+                    // Swipe left or right
+                    if (deltaX < 0) {
+                        swipeCard('left');
+                    } else {
+                        swipeCard('right');
+                    }
+                } else {
+                    // Return to center
+                    card.style.transform = '';
+                    
+                    // Reset next card opacity
+                    if (cards.length > 1) {
+                        cards[1].style.opacity = 0.8;
+                    }
+                }
+            });
+            
+            window.addEventListener('touchend', (e) => {
+                if (!isDragging || card !== cards[0]) return;
+                
+                isDragging = false;
+                card.style.transition = 'transform 0.3s ease';
+                
+                const deltaX = currentX - startX;
+                
+                // Determine if it's a swipe
+                if (Math.abs(deltaX) > 100) {
+                    // Swipe left or right
+                    if (deltaX < 0) {
+                        swipeCard('left');
+                    } else {
+                        swipeCard('right');
+                    }
+                } else {
+                    // Return to center
+                    card.style.transform = '';
+                    
+                    // Reset next card opacity
+                    if (cards.length > 1) {
+                        cards[1].style.opacity = 0.8;
+                    }
+                }
+            });
+        }
+        
+        // Display specific joke
         function displayJoke(key) {
-            jokeText.textContent = jokes[key];
-            jokeId.textContent = key.replace('key', '#');
+            // Clear current cards
+            cardsContainer.innerHTML = '';
+            cards = [];
+            
+            // Create new card with the specific joke
+            createCard(key);
+            
+            // Add two more random cards
+            const jokeKeys = Object.keys(jokes);
+            for (let i = 0; i < 2; i++) {
+                let randomKey;
+                do {
+                    randomKey = jokeKeys[Math.floor(Math.random() * jokeKeys.length)];
+                } while (randomKey === key);
+                
+                createCard(randomKey);
+            }
+            
+            // Position cards
+            positionCards();
             errorMsg.style.display = 'none';
         }
-
-        function getRandomJoke() {
-            const keys = Object.keys(jokes);
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            displayJoke(randomKey);
-        }
-
+        
+        // Event Listeners
+        swipeLeftBtn.addEventListener('click', () => swipeCard('left'));
+        swipeRightBtn.addEventListener('click', () => swipeCard('right'));
+        
         showJokeBtn.addEventListener('click', () => {
             const num = jokeNumber.value;
             
@@ -371,62 +691,23 @@ const jokes = {
                 errorMsg.style.display = 'block';
             }
         });
-
-        // Event listener for "Random Joke" button
-        randomJokeBtn.addEventListener('click', getRandomJoke);
-
-        // Allow pressing Enter key in the input field
+        
+        randomJokeBtn.addEventListener('click', () => {
+            const jokeKeys = Object.keys(jokes);
+            const randomKey = jokeKeys[Math.floor(Math.random() * jokeKeys.length)];
+            displayJoke(randomKey);
+        });
+        
         jokeNumber.addEventListener('keyup', (event) => {
             if (event.key === 'Enter') {
                 showJokeBtn.click();
             }
         });
-document.addEventListener("DOMContentLoaded", function () {
-    const jokeBox = document.getElementById("jokeText");
-    const jokeIdBox = document.getElementById("jokeId");
-    
-    // Display the 47th joke by default
-    const jokeNumber = 47;
-    const jokeKey = "key" + jokeNumber;
-    
-    if (jokes[jokeKey]) {
-        jokeBox.textContent = jokes[jokeKey];
-        jokeIdBox.textContent = `Joke #${jokeNumber}`;
-    }
-});
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-            displayJoke("key47");
+        
+        // Initialize the cards when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCards();
         });
-        let touchStartX = 0;
-let touchEndX = 0;
-
-document.addEventListener("touchstart", (event) => {
-    touchStartX = event.touches[0].clientX;
-});
-
-document.addEventListener("touchend", (event) => {
-    touchEndX = event.changedTouches[0].clientX;
-    handleSwipe();
-});
-
-function handleSwipe() {
-    if (touchEndX < touchStartX - 50) {
-        // Swipe left detected
-        showRandomJoke();
-    } else if (touchEndX > touchStartX + 50) {
-        // Swipe right detected
-        showRandomJoke();
-    }
-}
-
-function showRandomJoke() {
-    const jokeKeys = Object.keys(jokes);
-    const randomKey = jokeKeys[Math.floor(Math.random() * jokeKeys.length)];
-    document.getElementById("jokeText").innerText = jokes[randomKey];
-}
-
     </script>
 </body>
 </html>
