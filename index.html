@@ -103,37 +103,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
-        .swipe-left, .swipe-right {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.2s;
-        }
-        
-        .swipe-left {
-            left: 20px;
-        }
-        
-        .swipe-right {
-            right: 20px;
-        }
-        
-        .swipe-left:hover, .swipe-right:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-50%) scale(1.1);
-        }
+      
         
         .controls {
             margin-top: 1.5rem;
@@ -205,15 +175,19 @@
         }
         
         /* Tinder swipe animations */
-        .swipe-left-anim {
-            transform: translate(-200%, 0) rotate(-20deg);
-            opacity: 0;
-        }
-        
-        .swipe-right-anim {
-            transform: translate(200%, 0) rotate(20deg);
-            opacity: 0;
-        }
+.swipe-left-anim {
+    transition: transform 0.4s cubic-bezier(0.3, 0.7, 0.4, 1), opacity 0.4s ease-out; /* Add transition properties */
+    transform: translate(-150%, 0) rotate(-15deg); /* Reduced translation and rotation */
+    opacity: 0;
+    will-change: transform, opacity; /* Performance hint */
+}
+
+.swipe-right-anim {
+    transition: transform 0.4s cubic-bezier(0.3, 0.7, 0.4, 1), opacity 0.4s ease-out; /* Add transition properties */
+    transform: translate(150%, 0) rotate(15deg); /* Reduced translation and rotation */
+    opacity: 0;
+    will-change: transform, opacity; /* Performance hint */
+}
         
         /* Instructions overlay */
         .instructions {
@@ -288,9 +262,7 @@
         <div class="cards-container" id="cardsContainer">
             <!-- Cards will be dynamically added here -->
         </div>
-        
-        <div class="swipe-left" id="swipeLeftBtn">←</div>
-        <div class="swipe-right" id="swipeRightBtn">→</div>
+    
         
         <div class="controls">
             <input type="number" class="joke-input" id="jokeNumber" placeholder="Enter joke number (1-100)" min="1" max="100">
@@ -368,7 +340,7 @@ const jokes = {
     "key60": "Segmentation fault (core dumped). The story of my life.",
     "key61": "Why did the web developer go broke? Because he used up all his cache.",
     "key62": "My love life is like my code—full of exceptions.",
-        "key63": "The problem with programming jokes is that not everyone gets them.",
+    "key63": "The problem with programming jokes is that not everyone gets them.",
     "key64": "Why do programmers hate nature? It has too many bugs.",
     "key65": "A C programmer goes to the store. His wife says, 'Buy a gallon of milk, and if they have eggs, get a dozen.' He returns with 13 gallons of milk.",
     "key66": "How do you comfort a JavaScript bug? You console it.",
@@ -416,9 +388,7 @@ const jokes = {
         const showJokeBtn = document.getElementById('showJokeBtn');
         const randomJokeBtn = document.getElementById('randomJokeBtn');
         const errorMsg = document.getElementById('errorMsg');
-        const swipeLeftBtn = document.getElementById('swipeLeftBtn');
-        const swipeRightBtn = document.getElementById('swipeRightBtn');
-        
+       
         let currentCardIndex = 0;
         let cards = [];
         const maxVisibleCards = 3;
@@ -668,10 +638,7 @@ const jokes = {
             errorMsg.style.display = 'none';
         }
         
-        // Event Listeners
-        swipeLeftBtn.addEventListener('click', () => swipeCard('left'));
-        swipeRightBtn.addEventListener('click', () => swipeCard('right'));
-        
+      
         showJokeBtn.addEventListener('click', () => {
             const num = jokeNumber.value;
             
